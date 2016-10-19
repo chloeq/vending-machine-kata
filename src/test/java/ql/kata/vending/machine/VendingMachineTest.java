@@ -2,6 +2,7 @@ package ql.kata.vending.machine;
 
 import org.junit.Before;
 import org.junit.Test;
+import ql.kata.vending.machine.enums.Coin;
 
 import java.math.BigDecimal;
 

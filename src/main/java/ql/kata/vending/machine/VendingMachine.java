@@ -1,6 +1,10 @@
 package ql.kata.vending.machine;
 
 
+import ql.kata.vending.machine.enums.Coin;
+import ql.kata.vending.machine.enums.Message;
+import ql.kata.vending.machine.handlers.CoinHandler;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,19 +13,20 @@ public class VendingMachine {
 
     private String currentMessage;
     private BigDecimal currentBalance;
-    private Map<Coin, Integer> coinBank;
+    private CoinHandler coinHandler;
+
 
     VendingMachine() {
-        currentMessage = "INSERT COIN";
+        currentMessage = Message.WAITING.getMessage();
         currentBalance = new BigDecimal("0");
-        coinBank = new HashMap<>();
+        coinHandler = new CoinHandler();
     }
 
     public BigDecimal acceptCoin(Coin coin) {
         if (coin.isValid()) {
             currentBalance = currentBalance.add(coin.getValue());
             currentMessage = currentBalance.toString();
-            collectCoin(coin);
+            coinHandler.collectCoin(coin);
         } else {
             rejectCoin();
         }
@@ -31,13 +36,7 @@ public class VendingMachine {
     public String getCurrentMessage() {
         return currentMessage;
     }
-    private void collectCoin(Coin coin) {
-        if (coinBank.containsKey(coin)) {
-            coinBank.put(coin, coinBank.get(coin)+1);
-        } else {
-            coinBank.put(coin, 1);
-        }
-    }
+
 
     private void rejectCoin() {
 

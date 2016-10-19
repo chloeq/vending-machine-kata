@@ -1,4 +1,4 @@
-package ql.kata.vending.machine;
+package ql.kata.vending.machine.enums;
 
 
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ public enum Coin {
 
     private BigDecimal value;
 
-    Coin(BigDecimal value) {
+    Coin(final BigDecimal value) {
         this.value = value;
     }
 
