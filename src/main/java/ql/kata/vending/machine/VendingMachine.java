@@ -24,13 +24,14 @@ public class VendingMachine {
                    final ProductHandler productHandler,
                    final DisplayHandler displayHandler) {
         currentMessage = Message.WAITING.getMessage();
-        currentBalance = new BigDecimal("0");
+        currentBalance = BigDecimal.ZERO;
         this.coinHandler = coinHandler;
         this.productHandler = productHandler;
         this.displayHandler = displayHandler;
+        sendCurrentMessageToDisplay();
     }
 
-    public BigDecimal acceptCoin(final Coin coin) {
+    public void acceptCoin(final Coin coin) {
         if (coin.isValid()) {
             currentBalance = currentBalance.add(coin.getValue());
             currentMessage = currentBalance.toString();
@@ -38,7 +39,7 @@ public class VendingMachine {
         } else {
             coinHandler.rejectCoin(coin);
         }
-        return coin.getValue();
+        sendCurrentMessageToDisplay();
     }
 
     public void selectProduct(final Product product) {
@@ -46,25 +47,40 @@ public class VendingMachine {
         if (currentBalance.compareTo(price) >= 0) {
             productHandler.dispenseProduct(product);
             currentMessage = Message.THANKYOU.getMessage();
-            displayHandler.displayMessage(currentMessage);
-            currentMessage = Message.WAITING.getMessage();
+            sendCurrentMessageToDisplay();
+            resetCurrentMessage();
             if(currentBalance.compareTo(price) > 0) {
                 coinHandler.placeToCoinReturn(currentBalance.subtract(price));
             }
             currentBalance = BigDecimal.ZERO;
         } else {
             currentMessage = String.format("%s %s", Message.PRICE.getMessage(), product.getPrice().toString());
-            displayHandler.displayMessage(currentMessage);
+            sendCurrentMessageToDisplay();
             if (currentBalance.compareTo(BigDecimal.ZERO) == 0) {
-                currentMessage = Message.WAITING.getMessage();
+                resetCurrentMessage();
             } else {
                 currentMessage = currentBalance.toString();
             }
         }
     }
 
+    public void returnCoins() {
+        coinHandler.placeToCoinReturn(currentBalance);
+        currentBalance = BigDecimal.ZERO;
+        resetCurrentMessage();
+        sendCurrentMessageToDisplay();
+    }
+
     public void checkDisplay() {
+        sendCurrentMessageToDisplay();
+    }
+
+    private void sendCurrentMessageToDisplay() {
         displayHandler.displayMessage(currentMessage);
+    }
+
+    public void resetCurrentMessage() {
+        currentMessage = Message.WAITING.getMessage();
     }
 
     public String getCurrentMessage() {
@@ -74,5 +90,6 @@ public class VendingMachine {
     public BigDecimal getCurrentBalance() {
         return currentBalance;
     }
+
 
 }
