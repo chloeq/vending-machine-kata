@@ -5,7 +5,8 @@ public enum Message {
     WAITING("INSERT COIN"),
     THANKYOU("THANK YOU"),
     PRICE("PRICE"),
-    SOLDOUT("SOLD OUT");
+    SOLDOUT("SOLD OUT"),
+    EXACTCHANGE("EXACT CHANGE ONLY");
 
     String message;
     Message(final String message) {

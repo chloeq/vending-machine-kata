@@ -136,4 +136,24 @@ public class VendingMachineTest {
         vendingMachine.checkDisplay();
         verify(displayHandler, times(2)).displayMessage("0.50");
     }
+
+    @Test
+    public void checkForExactChangeAndDisplayCorrectInfo() {
+        when(coinHandler.notAbleToMakeChange()).thenReturn(true);
+        when(productHandler.isProductOutOfStock(Product.CANDY)).thenReturn(true);
+        vendingMachine.selectProduct(Product.CANDY);
+        verify(displayHandler, times(1)).displayMessage("SOLD OUT");
+        vendingMachine.checkDisplay();
+        verify(displayHandler, times(1)).displayMessage("EXACT CHANGE ONLY");
+        vendingMachine.acceptCoin(Coin.DIME);
+        verify(displayHandler, times(1)).displayMessage("0.10");
+        vendingMachine.returnCoins();
+        verify(displayHandler, times(2)).displayMessage("EXACT CHANGE ONLY");
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.selectProduct(Product.CHIPS);
+        verify(displayHandler, times(1)).displayMessage("THANK YOU");
+        vendingMachine.checkDisplay();
+        verify(displayHandler, times(3)).displayMessage("EXACT CHANGE ONLY");
+    }
 }

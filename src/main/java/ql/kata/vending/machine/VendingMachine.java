@@ -23,11 +23,11 @@ public class VendingMachine {
     VendingMachine(final CoinHandler coinHandler,
                    final ProductHandler productHandler,
                    final DisplayHandler displayHandler) {
-        currentMessage = Message.WAITING.getMessage();
-        currentBalance = BigDecimal.ZERO;
         this.coinHandler = coinHandler;
         this.productHandler = productHandler;
         this.displayHandler = displayHandler;
+        currentMessage = getDefaultMessage();
+        currentBalance = BigDecimal.ZERO;
         sendCurrentMessageToDisplay();
     }
 
@@ -43,7 +43,7 @@ public class VendingMachine {
     }
 
     public void selectProduct(final Product product) {
-        if(checkForSoldOut(product)) return;
+        if(ifSoldOut(product)) return;
         BigDecimal price = product.getPrice();
         if (currentBalance.compareTo(price) >= 0) {
             productHandler.dispenseProduct(product);
@@ -65,7 +65,7 @@ public class VendingMachine {
         }
     }
 
-    private boolean checkForSoldOut(Product product) {
+    private boolean ifSoldOut(Product product) {
         if(productHandler.isProductOutOfStock(product)){
             currentMessage = Message.SOLDOUT.getMessage();
             sendCurrentMessageToDisplay();
@@ -80,10 +80,6 @@ public class VendingMachine {
         }
     }
 
-    private boolean hasPositiveBalance() {
-        return (currentBalance.compareTo(BigDecimal.ZERO) > 0);
-    }
-
     public void returnCoins() {
         coinHandler.placeToCoinReturn(currentBalance);
         currentBalance = BigDecimal.ZERO;
@@ -95,18 +91,32 @@ public class VendingMachine {
         sendCurrentMessageToDisplay();
     }
 
+    public BigDecimal getCurrentBalance() {
+        return currentBalance;
+    }
+
+    private String getDefaultMessage() {
+        if (needExactChange()) {
+            return Message.EXACTCHANGE.getMessage();
+        } else {
+            return Message.WAITING.getMessage();
+        }
+    }
+
+    private boolean needExactChange() {
+        return coinHandler.notAbleToMakeChange();
+    }
+
     private void sendCurrentMessageToDisplay() {
         displayHandler.displayMessage(currentMessage);
     }
 
     private void resetCurrentMessage() {
-        currentMessage = Message.WAITING.getMessage();
+        currentMessage = getDefaultMessage();
     }
 
-
-    public BigDecimal getCurrentBalance() {
-        return currentBalance;
+    private boolean hasPositiveBalance() {
+        return (currentBalance.compareTo(BigDecimal.ZERO) > 0);
     }
-
 
 }
