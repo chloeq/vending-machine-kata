@@ -99,7 +99,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    public void SelectProductWillMakeChangeWithCorrectAmount() {
+    public void selectProductWillMakeChangeWithCorrectAmount() {
         vendingMachine.acceptCoin(Coin.QUARTER);
         vendingMachine.acceptCoin(Coin.QUARTER);
         vendingMachine.acceptCoin(Coin.QUARTER);
@@ -109,7 +109,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    public void ReturnCoinsWillReturnFullAmountAndResetMessage() {
+    public void returnCoinsWillReturnFullAmountAndResetMessage() {
         verify(displayHandler, times(1)).displayMessage("INSERT COIN");
         vendingMachine.acceptCoin(Coin.DIME);
         vendingMachine.acceptCoin(Coin.QUARTER);
@@ -120,4 +120,20 @@ public class VendingMachineTest {
         assertEquals("Balance after coin return is 0.0", 0, vendingMachine.getCurrentBalance().compareTo(BigDecimal.ZERO));
     }
 
+    @Test
+    public void checkForOutOfStockAndDisplayCorrectInfo() {
+        when(productHandler.isProductOutOfStock(Product.CHIPS)).thenReturn(true);
+        verify(displayHandler, times(1)).displayMessage("INSERT COIN");
+        vendingMachine.selectProduct(Product.CHIPS);
+        verify(displayHandler, times(1)).displayMessage("SOLD OUT");
+        vendingMachine.checkDisplay();
+        verify(displayHandler, times(2)).displayMessage("INSERT COIN");
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        verify(displayHandler, times(1)).displayMessage("0.50");
+        vendingMachine.selectProduct(Product.CHIPS);
+        verify(displayHandler, times(2)).displayMessage("SOLD OUT");
+        vendingMachine.checkDisplay();
+        verify(displayHandler, times(2)).displayMessage("0.50");
+    }
 }

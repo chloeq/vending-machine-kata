@@ -4,7 +4,8 @@ package ql.kata.vending.machine.enums;
 public enum Message {
     WAITING("INSERT COIN"),
     THANKYOU("THANK YOU"),
-    PRICE("PRICE");
+    PRICE("PRICE"),
+    SOLDOUT("SOLD OUT");
 
     String message;
     Message(final String message) {

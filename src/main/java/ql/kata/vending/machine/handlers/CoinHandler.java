@@ -9,17 +9,17 @@ import java.util.Map;
 
 public class CoinHandler {
 
-    private Map<Coin, Integer> coinBank;
+    private Map<String, Integer> coinBank;
 
     public CoinHandler() {
         coinBank = new HashMap<>();
     }
 
     public void collectCoin(final Coin coin) {
-        if (coinBank.containsKey(coin)) {
-            coinBank.put(coin, coinBank.get(coin)+1);
+        if (coinBank.containsKey(coin.getName())) {
+            coinBank.put(coin.getName(), coinBank.get(coin.getName())+1);
         } else {
-            coinBank.put(coin, 1);
+            coinBank.put(coin.getName(), 1);
         }
     }
 
@@ -32,8 +32,8 @@ public class CoinHandler {
 
     public int getCoinCount(final Coin coin) {
         int count = 0;
-        if(coinBank.containsKey(coin)) {
-            count = coinBank.get(coin);
+        if(coinBank.containsKey(coin.getName())) {
+            count = coinBank.get(coin.getName());
         }
         return count;
     }

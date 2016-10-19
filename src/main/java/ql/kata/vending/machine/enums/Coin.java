@@ -5,16 +5,22 @@ import java.math.BigDecimal;
 
 public enum Coin {
 
-    NICKEL(new BigDecimal("0.05")),
-    DIME(new BigDecimal("0.10")),
-    QUARTER(new BigDecimal("0.25")),
-    PENNY(BigDecimal.ZERO),
-    OTHER(BigDecimal.ZERO);
+    NICKEL("nickel", new BigDecimal("0.05")),
+    DIME("dime", new BigDecimal("0.10")),
+    QUARTER("quarter", new BigDecimal("0.25")),
+    PENNY("penny", BigDecimal.ZERO),
+    OTHER("other", BigDecimal.ZERO);
 
+    private String name;
     private BigDecimal value;
 
-    Coin(final BigDecimal value) {
+    Coin(final String name, final BigDecimal value) {
+        this.name = name;
         this.value = value;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public BigDecimal getValue() {

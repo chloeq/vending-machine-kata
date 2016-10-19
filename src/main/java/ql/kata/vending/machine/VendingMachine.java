@@ -43,6 +43,7 @@ public class VendingMachine {
     }
 
     public void selectProduct(final Product product) {
+        if(checkForSoldOut(product)) return;
         BigDecimal price = product.getPrice();
         if (currentBalance.compareTo(price) >= 0) {
             productHandler.dispenseProduct(product);
@@ -56,12 +57,31 @@ public class VendingMachine {
         } else {
             currentMessage = String.format("%s %s", Message.PRICE.getMessage(), product.getPrice().toString());
             sendCurrentMessageToDisplay();
-            if (currentBalance.compareTo(BigDecimal.ZERO) == 0) {
-                resetCurrentMessage();
-            } else {
+            if(hasPositiveBalance()) {
                 currentMessage = currentBalance.toString();
+            } else {
+                resetCurrentMessage();
             }
         }
+    }
+
+    private boolean checkForSoldOut(Product product) {
+        if(productHandler.isProductOutOfStock(product)){
+            currentMessage = Message.SOLDOUT.getMessage();
+            sendCurrentMessageToDisplay();
+            if(hasPositiveBalance()) {
+                currentMessage = currentBalance.toString();
+            } else {
+                resetCurrentMessage();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean hasPositiveBalance() {
+        return (currentBalance.compareTo(BigDecimal.ZERO) > 0);
     }
 
     public void returnCoins() {
