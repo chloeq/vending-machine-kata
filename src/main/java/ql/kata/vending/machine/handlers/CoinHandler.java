@@ -11,7 +11,7 @@ public class CoinHandler {
 
     private Map<String, Integer> coinBank;
 
-    public CoinHandler() {
+    CoinHandler() {
         coinBank = new HashMap<>();
     }
 
@@ -30,9 +30,9 @@ public class CoinHandler {
 
     }
 
-    public int getCoinCount(final Coin coin) {
+    private int getCoinCount(final Coin coin) {
         int count = 0;
-        if(coinBank.containsKey(coin.getName())) {
+        if(coinBank.containsKey(coin.getName()) && coinBank.get(coin.getName()) > 0) {
             count = coinBank.get(coin.getName());
         }
         return count;

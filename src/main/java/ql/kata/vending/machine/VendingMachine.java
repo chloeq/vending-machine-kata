@@ -99,13 +99,10 @@ public class VendingMachine {
         displayHandler.displayMessage(currentMessage);
     }
 
-    public void resetCurrentMessage() {
+    private void resetCurrentMessage() {
         currentMessage = Message.WAITING.getMessage();
     }
 
-    public String getCurrentMessage() {
-        return currentMessage;
-    }
 
     public BigDecimal getCurrentBalance() {
         return currentBalance;
