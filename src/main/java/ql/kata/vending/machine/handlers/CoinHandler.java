@@ -3,6 +3,7 @@ package ql.kata.vending.machine.handlers;
 
 import ql.kata.vending.machine.enums.Coin;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,9 @@ public class CoinHandler {
     }
 
     public void rejectCoin(final Coin coin) {
+
+    }
+    public void placeToCoinReturn(final BigDecimal amount) {
 
     }
 

@@ -48,6 +48,9 @@ public class VendingMachine {
             currentMessage = Message.THANKYOU.getMessage();
             displayHandler.displayMessage(currentMessage);
             currentMessage = Message.WAITING.getMessage();
+            if(currentBalance.compareTo(price) > 0) {
+                coinHandler.placeToCoinReturn(currentBalance.subtract(price));
+            }
             currentBalance = BigDecimal.ZERO;
         } else {
             currentMessage = String.format("%s %s", Message.PRICE.getMessage(), product.getPrice().toString());

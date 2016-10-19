@@ -98,4 +98,13 @@ public class VendingMachineTest {
         assertEquals("current balance is set back to 0.0", 0, vendingMachine.getCurrentBalance().compareTo(BigDecimal.ZERO));
     }
 
+    @Test
+    public void SelectProductWillMakeChangeWithCorrectAmount() {
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.acceptCoin(Coin.QUARTER);
+        vendingMachine.selectProduct(Product.CANDY);
+        verify(coinHandler, times(1)).placeToCoinReturn(new BigDecimal("0.10"));
+    }
+
 }
