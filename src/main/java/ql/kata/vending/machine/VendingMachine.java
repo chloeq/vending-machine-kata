@@ -16,10 +16,10 @@ public class VendingMachine {
     private CoinHandler coinHandler;
 
 
-    VendingMachine() {
+    VendingMachine(final CoinHandler coinHandler) {
         currentMessage = Message.WAITING.getMessage();
         currentBalance = new BigDecimal("0");
-        coinHandler = new CoinHandler();
+        this.coinHandler = coinHandler;
     }
 
     public BigDecimal acceptCoin(Coin coin) {
@@ -28,7 +28,7 @@ public class VendingMachine {
             currentMessage = currentBalance.toString();
             coinHandler.collectCoin(coin);
         } else {
-            rejectCoin();
+            coinHandler.rejectCoin(coin);
         }
         return coin.getValue();
     }
@@ -37,8 +37,4 @@ public class VendingMachine {
         return currentMessage;
     }
 
-
-    private void rejectCoin() {
-
-    }
 }

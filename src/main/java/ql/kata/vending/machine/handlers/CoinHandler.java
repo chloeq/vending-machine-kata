@@ -14,12 +14,24 @@ public class CoinHandler {
         coinBank = new HashMap<>();
     }
 
-    public void collectCoin(Coin coin) {
+    public void collectCoin(final Coin coin) {
         if (coinBank.containsKey(coin)) {
             coinBank.put(coin, coinBank.get(coin)+1);
         } else {
             coinBank.put(coin, 1);
         }
+    }
+
+    public void rejectCoin(final Coin coin) {
+
+    }
+
+    public int getCoinCount(final Coin coin) {
+        int count = 0;
+        if(coinBank.containsKey(coin)) {
+            count = coinBank.get(coin);
+        }
+        return count;
     }
 
 }
